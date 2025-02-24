@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: cd995bd24a7070242968b4499e46e96c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Common/Materials/Depth
+    Overwrite.mat
+  uploadId: 696366

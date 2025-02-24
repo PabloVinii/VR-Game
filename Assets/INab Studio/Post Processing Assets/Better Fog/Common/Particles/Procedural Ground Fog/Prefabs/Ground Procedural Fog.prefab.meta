@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 77279bcf000de9d478312c5ec2f11d5d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Common/Particles/Procedural
+    Ground Fog/Prefabs/Ground Procedural Fog.prefab
+  uploadId: 696366

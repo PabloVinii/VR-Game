@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7ac6223e6ad758f4f86c22b4f777c864
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Demo Assets/INab Studio/Timelines/Better Fog/Vertical
+    Fog Plane (Fog Offset)Timeline.playable
+  uploadId: 696366

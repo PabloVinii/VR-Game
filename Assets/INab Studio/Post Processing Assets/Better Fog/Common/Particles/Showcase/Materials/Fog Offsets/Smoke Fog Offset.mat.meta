@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d30ce468b8465e147a267bc7022ce4e6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Common/Particles/Showcase/Materials/Fog
+    Offsets/Smoke Fog Offset.mat
+  uploadId: 696366

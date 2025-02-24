@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2a415bd4865534146b38d0eaeae61e0b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Common/Particles/Showcase/Materials/Fog
+    Offsets/Steam Fog Offset.mat
+  uploadId: 696366

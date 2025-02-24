@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7752ed72bf1a8ea4a89c1ed07fd99283
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Resources/Gradients/Fog
+    Gradients/Fog Gradient 17.asset
+  uploadId: 696366

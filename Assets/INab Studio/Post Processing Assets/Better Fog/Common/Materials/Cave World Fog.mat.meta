@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c9ad4898da62bc547b01604b216895ae
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Common/Materials/Cave
+    World Fog.mat
+  uploadId: 696366

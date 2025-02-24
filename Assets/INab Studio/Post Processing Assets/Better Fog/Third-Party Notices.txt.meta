@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: aa32fee756c27ee4ea1dccf320ed2632
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Post Processing Assets/Better Fog/Third-Party Notices.txt
+  uploadId: 696366

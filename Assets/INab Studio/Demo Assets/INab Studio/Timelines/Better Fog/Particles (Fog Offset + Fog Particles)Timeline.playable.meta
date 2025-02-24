@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e18afea52f0122348b12ecfb67c7991e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 259457
+  packageName: 'Better Fog: Height Fog, Light Scattering & More'
+  packageVersion: 1.3
+  assetPath: Assets/INab Studio/Demo Assets/INab Studio/Timelines/Better Fog/Particles
+    (Fog Offset + Fog Particles)Timeline.playable
+  uploadId: 696366
