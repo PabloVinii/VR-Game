@@ -64,24 +64,18 @@ public class UxrDynamicHeightLocomotion : UxrLocomotion
 
         UpdateCapsuleHeight();
 
-        // 2. Ler entradas de joystick (esquerdo para movimento, direito para rotação)
         Vector2 inputMove = Avatar.ControllerInput.GetInput2D(movementHand, UxrInput2D.Joystick);
         Vector2 inputTurn = Avatar.ControllerInput.GetInput2D(rotationHand, UxrInput2D.Joystick);
 
-        Debug.Log($"Move input = {inputMove}, Turn input = {inputTurn}");
-
-        // 3. Verificar sprint (botão pressionado?)
         bool isSprinting = Avatar.ControllerInput.GetButtonsPress(movementHand, sprintButton);
         Debug.Log($"Sprint Pressed = {isSprinting}");
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
-        // 4. Calcular direção de movimento no plano horizontal
         Vector3 forward = Vector3.ProjectOnPlane(Avatar.CameraComponent.transform.forward, Vector3.up).normalized;
         Vector3 right   = Vector3.ProjectOnPlane(Avatar.CameraComponent.transform.right,   Vector3.up).normalized;
 
         Vector3 moveDir = (forward * inputMove.y + right * inputMove.x) * currentSpeed;
 
-        // 5. Lidar com gravidade manualmente
         if (_charController.isGrounded && _verticalVelocity < 0f)
         {
             _verticalVelocity = 0f;
@@ -91,13 +85,10 @@ public class UxrDynamicHeightLocomotion : UxrLocomotion
             _verticalVelocity += gravity * Time.deltaTime;
         }
 
-        // 6. Combinar movimento horizontal com gravidade
         moveDir.y = _verticalVelocity;
 
-        // 7. Usar CharacterController.Move() para respeitar colisões
         _charController.Move(moveDir * Time.deltaTime);
 
-        // 8. Rotação suave
         float turnInput = inputTurn.x;
         if (Mathf.Abs(turnInput) > 0.01f)
         {
@@ -127,8 +118,6 @@ public class UxrDynamicHeightLocomotion : UxrLocomotion
         // Ajusta a altura do CharacterController
         _charController.height = clampedHeight;
 
-        // O CharacterController exige que o "center.y" seja metade da altura para ficar "de pé".
-        // Se quiser, pode adicionar offsets se o pivot não estiver no chão
         Vector3 newCenter = _charController.center;
         newCenter.y = _charController.height * 0.5f;
         _charController.center = newCenter;
