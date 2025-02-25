@@ -20,6 +20,7 @@ namespace UltimateXR.Locomotion
 
         // Arc
 
+
         [SerializeField] [Range(2,     1000)] private int                    _arcSegments           = 100;
         [SerializeField] [Range(0.01f, 0.4f)] private float                  _arcWidth              = 0.1f;
         [SerializeField]                      private float                  _arcScrollSpeedValid   = 1.0f;
