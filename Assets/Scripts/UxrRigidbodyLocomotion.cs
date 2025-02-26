@@ -8,37 +8,27 @@ using UnityEngine;
 public class UxrRigidbodyLocomotion : UxrLocomotion
 {
     [Header("Movement Settings")]
-    [Tooltip("Velocidade de locomoção (m/s) normal.")]
     public float moveSpeed = 2.0f;
-
-    [Tooltip("Velocidade de \"sprint\" (m/s).")]
     public float sprintSpeed = 4.0f;
-
-    [Tooltip("Utilizar gravidade interna do Rigidbody (caso contrário, faremos manual).")]
     public bool useEngineGravity = true;
 
     [Header("Rotation Settings")]
-    [Tooltip("Velocidade de rotação (graus por segundo) ao girar pelo joystick.")]
     public float rotationSpeed = 120f;
 
     [Header("Control Setup")]
-    [Tooltip("Qual mão controlará o movimento.")]
-    public UxrHandSide movementHand = UxrHandSide.Left;
-
-    [Tooltip("Qual mão controlará a rotação.")]
-    public UxrHandSide rotationHand = UxrHandSide.Right;
-
-    [Tooltip("Botão que ativa o 'sprint'.")]
+    public UxrHandSide movementHand = UxrHandSide.Left;   // Mão do joystick de movimento
+    public UxrHandSide rotationHand = UxrHandSide.Right;  // Mão do joystick de rotação
     public UxrInputButtons sprintButton = UxrInputButtons.Joystick;
 
     [Header("Capsule Settings")]
-    [Tooltip("Altura mínima do capsule para evitar ficar menor que o \"joelho\" do personagem.")]
     public float minHeight = 0.5f;
-
-    [Tooltip("Altura máxima do capsule, por exemplo a altura de uma pessoa em pé.")]
     public float maxHeight = 2.0f;
 
-    private Rigidbody _rb;
+    // Se quiser girar em torno de outro ponto (por ex. o chão sob os pés):
+    [Header("Turning Pivot (Opcional)")]
+    public Transform turnSource;
+
+    private Rigidbody       _rb;
     private CapsuleCollider _capsule;
 
     public override bool IsSmoothLocomotion => true;
@@ -50,52 +40,54 @@ public class UxrRigidbodyLocomotion : UxrLocomotion
         _rb = GetComponent<Rigidbody>();
         _capsule = GetComponent<CapsuleCollider>();
 
-        // Configurações típicas de um Rigidbody de “player”:
-        // 1. Evitar que tombe (freeze rotation).
-        _rb.freezeRotation = true;  
-
-        // 2. Se quisermos usar a gravidade natural do Unity:
-        //    (Senão, setar false e aplicar gravidade manual).
-        _rb.useGravity = useEngineGravity;  
+        // Evitar tombar
+        _rb.freezeRotation = true;
+        _rb.useGravity = useEngineGravity;
     }
 
     protected override void UpdateLocomotion()
     {
-        if (Avatar == null || Avatar.CameraComponent == null) return;
+        // Se não tiver Avatar ou câmera, abortar
+        if (Avatar == null || Avatar.CameraComponent == null)
+            return;
 
-        UpdateCapsuleHeight();
-        
-        // Ler input de movimento (joystick da mão de movimento)
+        // 1) Lê input de movimento
         Vector2 inputMove = Avatar.ControllerInput.GetInput2D(movementHand, UxrInput2D.Joystick);
-        // Ler input de rotação (joystick da mão de rotação)
-        Vector2 inputTurn = Avatar.ControllerInput.GetInput2D(rotationHand, UxrInput2D.Joystick);
-
-        // Verificar sprint
-        bool isSprinting = Avatar.ControllerInput.GetButtonsPress(movementHand, sprintButton);
+        bool isSprinting  = Avatar.ControllerInput.GetButtonsPress(movementHand, sprintButton);
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
 
-        // Direção de movimento (no plano horizontal)
-        Vector3 forward = Vector3.ProjectOnPlane(Avatar.CameraComponent.transform.forward, Vector3.up).normalized;
-        Vector3 right   = Vector3.ProjectOnPlane(Avatar.CameraComponent.transform.right,   Vector3.up).normalized;
-        Vector3 moveDir = (forward * inputMove.y + right * inputMove.x) * currentSpeed;
+        // Movimento baseado na direção da Câmera
+        Vector3 camForward = Vector3.ProjectOnPlane(Avatar.CameraComponent.transform.forward, Vector3.up).normalized;
+        Vector3 camRight   = Vector3.ProjectOnPlane(Avatar.CameraComponent.transform.right,   Vector3.up).normalized;
+        Vector3 moveDir    = (camForward * inputMove.y + camRight * inputMove.x) * currentSpeed;
 
-        Vector3 newPosition = _rb.position + moveDir * Time.deltaTime;
+        Vector3 targetMovePosition = _rb.position + moveDir * Time.deltaTime;
+
+        // 2) Lê input de rotação
+        Vector2 inputTurn = Avatar.ControllerInput.GetInput2D(rotationHand, UxrInput2D.Joystick);
+        float turnInput   = inputTurn.x;
+        float angle       = rotationSpeed * Time.deltaTime * turnInput;
+
+        // 3) Calcula rotação manual (sem RotateAvatar do UXR)
+        //    Gira em torno do pivot (turnSource) ou do próprio _rb.position
+        Vector3 pivot = turnSource ? turnSource.position : _rb.position;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.up);
+
+        // Rotacionamos a posição resultante em torno do pivot
+        Vector3 newPosition = targetMovePosition; 
+        if (Mathf.Abs(turnInput) > 0.01f)
+        {
+            newPosition = q * (targetMovePosition - pivot) + pivot;
+
+            // Aplica rotação ao rigidbody
+            Quaternion newRot = _rb.rotation * q;
+            _rb.MoveRotation(newRot);
+
+            Avatar.transform.rotation = newRot;
+        }
+
         _rb.MovePosition(newPosition);
 
-        float turnAmount = inputTurn.x;
-        if (Mathf.Abs(turnAmount) > 0.01f)
-        {
-            float degrees = turnAmount * rotationSpeed * Time.deltaTime;
-            UxrManager.Instance.RotateAvatar(Avatar, degrees);
-        }
-    }
 
-    void UpdateCapsuleHeight()
-    {
-        float userHeight = Avatar.CameraTransform.position.y - Avatar.CameraFloorPosition.y;
-        float clampedHeight = Mathf.Clamp(userHeight, minHeight, maxHeight);
-        _capsule.height = clampedHeight;
-        _capsule.center = new Vector3(0, clampedHeight / 2f, 0);
     }
-
 }

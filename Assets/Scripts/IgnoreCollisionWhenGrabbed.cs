@@ -1,30 +1,25 @@
 using UltimateXR.Manipulation;
-using UltimateXR.Avatar;
 using UnityEngine;
 
 public class IgnoreCollisionWhenGrabbed : MonoBehaviour
 {
-    // O collider do Player ou CharacterController
-    // Você pode arrastar via Inspector, ou buscar via script
-    [SerializeField] private Collider _playerCollider;
-
     private UxrGrabbableObject _grabbable;
-    private Collider           _myCollider;
+    private Collider[]         _objectColliders;
 
     private void Awake()
     {
-        // Vamos supor que este script está no mesmo objeto que tem UxrGrabbableObject
         _grabbable = GetComponent<UxrGrabbableObject>();
-        _myCollider = GetComponent<Collider>();
+        _objectColliders = GetComponentsInChildren<Collider>();
 
-        // Subscreve nos eventos
-        _grabbable.Grabbed += OnGrabbed;
-        _grabbable.Released += OnReleased;
+        if (_grabbable)
+        {
+            _grabbable.Grabbed += OnGrabbed;
+            _grabbable.Released += OnReleased;
+        }
     }
 
     private void OnDestroy()
     {
-        // Boas práticas: remover subscrição ao destruir
         if (_grabbable)
         {
             _grabbable.Grabbed -= OnGrabbed;
@@ -34,19 +29,29 @@ public class IgnoreCollisionWhenGrabbed : MonoBehaviour
 
     private void OnGrabbed(object sender, UxrManipulationEventArgs e)
     {
-        if (_playerCollider && _myCollider)
-        {
-            // Ignora colisão com o jogador
-            Physics.IgnoreCollision(_myCollider, _playerCollider, true);
-        }
+        SetCollisionsIgnored(true);
     }
 
     private void OnReleased(object sender, UxrManipulationEventArgs e)
     {
-        if (_playerCollider && _myCollider)
+        SetCollisionsIgnored(false);
+    }
+
+    private void SetCollisionsIgnored(bool ignore)
+    {
+        // Pegamos as referências do player via o Singleton
+        Collider[] avatarColliders = VRPlayerColliders.Instance.GetAllColliders();
+
+        // Iterar pares entre os colliders do objeto e do avatar
+        foreach (var objCol in _objectColliders)
         {
-            // Restaura colisão
-            Physics.IgnoreCollision(_myCollider, _playerCollider, false);
+            foreach (var avatarCol in avatarColliders)
+            {
+                if (objCol != avatarCol && objCol && avatarCol)
+                {
+                    Physics.IgnoreCollision(objCol, avatarCol, ignore);
+                }
+            }
         }
     }
 }
