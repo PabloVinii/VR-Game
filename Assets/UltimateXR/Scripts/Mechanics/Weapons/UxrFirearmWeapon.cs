@@ -312,6 +312,13 @@ namespace UltimateXR.Mechanics.Weapons
 
                             shoot = triggerPressed;
                             break;
+
+                        case UxrShotCycle.SemiAutoChambered:
+                        
+                            // Só atira se o gatilho foi pressionado (Down) E se a arma está "HasReloaded".
+                            shoot = triggerPressDown && trigger.HasReloaded;
+                            break;
+                        
                     }
 
                     if (triggerPressDown && GetAmmoLeft(trigger) == 0)
@@ -362,15 +369,19 @@ namespace UltimateXR.Mechanics.Weapons
             {
                 if (e.GrabbableAnchor == trigger.AmmunitionMagAnchor)
                 {
+                    // Re-habilitar o Collider do pente removido
                     Collider magCollider = e.GrabbableObject.GetComponentInChildren<Collider>();
-
                     if (magCollider != null)
                     {
                         magCollider.enabled = true;
                     }
+
+                    // Opcional: se quiser "descarregar" ao remover o pente:
+                    trigger.HasReloaded = false;
                 }
             }
         }
+
 
         /// <summary>
         ///     Called when a mag is attached.

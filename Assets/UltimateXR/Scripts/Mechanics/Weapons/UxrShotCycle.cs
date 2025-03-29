@@ -24,6 +24,8 @@ namespace UltimateXR.Mechanics.Weapons
         /// <summary>
         ///     Weapon keeps firing one round after another while the trigger is being pressed.
         /// </summary>
-        FullyAutomatic
+        FullyAutomatic,
+
+        SemiAutoChambered 
     }
 }
