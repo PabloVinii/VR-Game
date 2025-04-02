@@ -65,10 +65,23 @@ namespace UltimateXR.Mechanics.Weapons
         protected override void Awake()
         {
             base.Awake();
+
             _firearm    = GetComponent<UxrFirearmWeapon>();
             _localStart = _slide != null ? _slide.transform.localPosition : Vector3.zero;
-            _state      = State.WaitSlideBack;
+
+            if (_localSlideOffset == Vector3.zero)
+            {
+                Debug.LogWarning("[PistolSlide] ⚠️ _localSlideOffset está em (0,0,0). Isso pode causar erro de divisão!");
+            }
+
+            if (_localSlideDirection == Vector3.zero)
+            {
+                Debug.LogWarning("[PistolSlide] ⚠️ _localSlideDirection está em (0,0,0). Isso impedirá o cálculo do slide.");
+            }
+
+            _state = State.WaitSlideBack;
         }
+
 
         private void Update()
         {
@@ -77,9 +90,12 @@ namespace UltimateXR.Mechanics.Weapons
                 return;
             }
 
-            // Calcula o quanto o slide foi puxado (0 = posição inicial, 1 = totalmente puxado)
-            float currentSlide = Vector3.Scale(_slide.transform.localPosition - _localStart, _localSlideDirection).magnitude
-                                / _localSlideOffset.magnitude;
+            // 👉 Começamos medindo os vetores
+            Vector3 slideDisplacement = _slide.transform.localPosition - _localStart;
+            Vector3 scaledDisplacement = Vector3.Scale(slideDisplacement, _localSlideDirection);
+            float offsetMagnitude = _localSlideOffset.magnitude;
+
+            float currentSlide = scaledDisplacement.magnitude / Mathf.Max(offsetMagnitude, Mathf.Epsilon);
 
             switch (_state)
             {
